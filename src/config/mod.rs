@@ -1,12 +1,13 @@
 use dotenvy::dotenv;
 use sqlx::mysql::MySqlPoolOptions;
 use std::env;
+use sqlx::MySqlPool;
 
 use crate::routes;
 
 #[derive(Clone)]
 pub struct AppState {
-    pub db: sqlx::Pool<sqlx::MySql>,
+    pub db: MySqlPool,
 }
 
 #[tokio::main]
