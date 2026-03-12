@@ -1,15 +1,16 @@
 -- Add migration script here
-
-DROP TABLE IF EXISTS user_group;
-DROP TABLE IF EXISTS group_answer;
-DROP TABLE IF EXISTS user_answer;
-DROP TABLE IF EXISTS groups;
-DROP TABLE IF EXISTS survey_answer;
-DROP TABLE IF EXISTS surveys;
-DROP TABLE IF EXISTS categories;
-DROP TABLE IF EXISTS answers;
-
-DELETE FROM _sqlx_migrations WHERE version = 20260311131136;
+CREATE TABLE users (
+    id BINARY(16) PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    birth_date DATE NULL,
+    phone VARCHAR(20),
+    pp VARCHAR(255),
+    subscription BOOLEAN default FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE answers (
     id BINARY(16) PRIMARY KEY,
@@ -44,7 +45,7 @@ CREATE TABLE survey_answer(
     FOREIGN KEY (answer_id) REFERENCES answers(id) ON DELETE CASCADE
 );
 
-CREATE TABLE groups(
+CREATE TABLE `groups`(
     id BINARY(16) PRIMARY KEY,
     creator_id BINARY(16) NOT NULL,
     title VARCHAR(50) NOT NULL,
@@ -71,7 +72,7 @@ CREATE TABLE group_answer(
     group_id BINARY(16) NOT NULL,
 
     FOREIGN KEY (survey_answer_id) REFERENCES survey_answer(id) ON DELETE CASCADE,
-    FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE
+    FOREIGN KEY (group_id) REFERENCES `groups`(id) ON DELETE CASCADE
 );
 
 CREATE TABLE user_group(
@@ -80,15 +81,5 @@ CREATE TABLE user_group(
     group_id BINARY(16) NOT NULL,
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE
+    FOREIGN KEY (group_id) REFERENCES `groups`(id) ON DELETE CASCADE
 );
-
-ALTER TABLE users MODIFY COLUMN id BINARY(16) NOT NULL;
-
-ALTER TABLE users
-    ADD COLUMN first_name VARCHAR(255) NULL,
-    ADD COLUMN last_name VARCHAR(255) NULL,
-    ADD COLUMN birth_date DATE NULL,
-    ADD COLUMN pp VARCHAR(255) NULL,
-    ADD COLUMN subscription BOOLEAN DEFAULT FALSE;
-
