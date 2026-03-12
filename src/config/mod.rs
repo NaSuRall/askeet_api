@@ -24,10 +24,10 @@ pub async fn main() {
         .expect("Impossible de se connecter à MySQL");
 
     // Appliquer les migrations automatiquement
-    sqlx::migrate!()
-        .run(&db)
-        .await
-        .expect("Impossible d'appliquer les migrations");
+    //sqlx::migrate!()
+    //  .run(&db)
+    //.await
+    //s.expect("Impossible d'appliquer les migrations");
 
     // Créer le state global
     let state = AppState { db };
@@ -47,4 +47,3 @@ pub async fn main() {
 
     axum::serve(listener, app).await.unwrap();
 }
-
