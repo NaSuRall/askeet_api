@@ -1,9 +1,13 @@
 use crate::config::AppState;
-use crate::models::LoginRequest;
+use crate::models::{Claims, LoginRequest};
 use crate::models::User;
 use axum::Json;
 use axum::extract::State;
+use chrono::{Duration, Utc};
 use serde_json::{Value, json};
+use crate::models::claim;
+use jsonwebtoken::{encode, Header, EncodingKey, Algorithm};
+
 
 pub async fn login(State(state): State<AppState>, Json(body): Json<LoginRequest>) -> Json<Value> {
     let user = sqlx::query_as!(
@@ -21,7 +25,7 @@ pub async fn login(State(state): State<AppState>, Json(body): Json<LoginRequest>
                 // recupération de l'id avec le model User
                 // et pour qu'il demande que l'email et mdp Model LoginRequest
                 // je suis un genie
-                let token = generate_token();
+                let token = generate_token(user.id);
                 Json(json!({
                     "token": token,
                     "user": user
@@ -46,6 +50,21 @@ pub async fn login(State(state): State<AppState>, Json(body): Json<LoginRequest>
     }
 }
 
-pub fn generate_token() {
-    println!("Bjr conanrd");
+fn generate_token(user_id: u64) -> String {
+
+    let expiration = Utc::now()
+        .checked_add_signed(Duration::hours(24))
+        .unwrap()
+        .timestamp() as usize;
+
+    let claims = Claims {
+        sub: user_id,
+        exp: expiration,
+    };
+
+    encode(
+        &Header::default(),
+        &claims,
+        &EncodingKey::from_secret("secret_key".as_ref())
+    ).unwrap()
 }

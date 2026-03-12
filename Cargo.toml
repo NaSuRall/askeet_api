@@ -18,3 +18,4 @@ sqlx = { version = "0.7", features = [
 ] }
 
 tokio = { version = "1.50.0", features = ["full"] }
+jsonwebtoken = { version = "10", features = ["rust_crypto"] }
