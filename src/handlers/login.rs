@@ -5,8 +5,7 @@ use axum::Json;
 use axum::extract::State;
 use chrono::{Duration, Utc};
 use serde_json::{Value, json};
-use crate::models::claim;
-use jsonwebtoken::{encode, Header, EncodingKey, Algorithm};
+use jsonwebtoken::{encode, Header, EncodingKey};
 
 
 pub async fn login(State(state): State<AppState>, Json(body): Json<LoginRequest>) -> Json<Value> {
@@ -21,10 +20,6 @@ pub async fn login(State(state): State<AppState>, Json(body): Json<LoginRequest>
     match user {
         Ok(Some(user)) => {
             if user.password == body.password {
-                // Function qui genere le token et qui envoie en json dans token
-                // recupération de l'id avec le model User
-                // et pour qu'il demande que l'email et mdp Model LoginRequest
-                // je suis un genie
                 let token = generate_token(user.id);
                 Json(json!({
                     "token": token,
