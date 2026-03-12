@@ -1,8 +1,10 @@
-use serde::{Serialize, Deserialize};
 use chrono::{NaiveDate, NaiveDateTime};
-use sqlx::types::Uuid;
+use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
+use uuid::Uuid;
 
-#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+
+#[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct User {
     pub id: String,
     pub last_name: String,
@@ -18,10 +20,24 @@ pub struct User {
 }
 
 #[derive(Deserialize)]
+pub struct LoginRequest {
+    pub email: String,
+    pub password: String,
+}
+
+
+#[derive(Deserialize)]
 pub struct RegisterUser {
     pub last_name: String,
     pub first_name: String,
     pub pseudo: String,
+    pub email: String,
+    pub password: String,
+}
+
+#[derive(Debug, FromRow, Serialize, Deserialize)]
+pub struct AuthUser {
+    pub id: Uuid,
     pub email: String,
     pub password: String,
 }

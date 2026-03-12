@@ -3,5 +3,5 @@ use axum::Router;
 pub mod user;
 
 pub fn create_router() -> Router<AppState> {
-    Router::new().nest("/user", user::routes())
+    Router::new().nest("/api", user::routes())
 }
