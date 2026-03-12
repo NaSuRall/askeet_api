@@ -2,28 +2,34 @@ use axum::{Json, extract::State};
 use serde_json::{json, Value};
 use uuid::Uuid;
 use crate::{config::AppState, models::User};
-
+use crate::models::RegisterUser;
 pub async fn register(
     State(state): State<AppState>,
-    Json(body): Json<User>,
+    Json(body): Json<RegisterUser>,
 ) -> Json<Value> {
 
+
     let id = Uuid::new_v4();
+
     let result = sqlx::query_as!(
         User,
-        "INSERT INTO users (id, name, email) VALUES (?, ?, ?) ",
-        id.as_bytes(),
-        body.name,
-        body.email
+        "INSERT INTO users (id, last_name, first_name, pseudo, email, password) VALUES (?, ?, ?, ?, ?, ?)",
+        id,
+        body.last_name,
+        body.first_name,
+        body.pseudo,
+        body.email,
+        body.password,
     )
-            .fetch_one(&state.db)
-            .await;
+        .execute(&state.db)
+        .await;
+
 
     match result {
-        Ok(res) => {
-            let id = res.last_insert_id(); // 👈 spécifique MySQL
-            Json(json!({ "id": id, "name": body.name, "email": body.email }))
-        }
+        Ok(_) => Json(json!({
+            "message": "User registered successfully",
+            "status": "success"
+        })),
         Err(e) => Json(json!({ "error": e.to_string() })),
     }
 }

@@ -1,13 +1,12 @@
 use dotenvy::dotenv;
 use sqlx::mysql::MySqlPoolOptions;
 use std::env;
-use sqlx::MySqlPool;
 
 use crate::routes;
 
 #[derive(Clone)]
 pub struct AppState {
-    pub db: MySqlPool,
+    pub db: sqlx::Pool<sqlx::MySql>,
 }
 
 #[tokio::main]
@@ -26,9 +25,9 @@ pub async fn main() {
 
     // Appliquer les migrations automatiquement
     //sqlx::migrate!()
-      //  .run(&db)
-        //.await
-        //s.expect("Impossible d'appliquer les migrations");
+    //  .run(&db)
+    //.await
+    //s.expect("Impossible d'appliquer les migrations");
 
     // Créer le state global
     let state = AppState { db };
@@ -48,4 +47,3 @@ pub async fn main() {
 
     axum::serve(listener, app).await.unwrap();
 }
-
