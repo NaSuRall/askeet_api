@@ -15,7 +15,9 @@ sqlx = { version = "0.7", features = [
     "mysql",
     "macros",
     "chrono",
+    "uuid",
 ] }
 
 tokio = { version = "1.50.0", features = ["full"] }
 jsonwebtoken = { version = "10", features = ["rust_crypto"] }
+uuid = { version = "1", features = ["serde", "v4"] }

@@ -1,26 +1,34 @@
 use crate::config::AppState;
 use crate::models::{Claims, LoginRequest};
 use crate::models::User;
+use crate::models::AuthUser;
 use axum::Json;
 use axum::extract::State;
 use chrono::{Duration, Utc};
 use serde_json::{Value, json};
 use jsonwebtoken::{encode, Header, EncodingKey};
-
+use uuid::Uuid;
 
 pub async fn login(State(state): State<AppState>, Json(body): Json<LoginRequest>) -> Json<Value> {
-    let user = sqlx::query_as!(
-        User,
-        "SELECT id, email, password FROM users WHERE email = ?",
-        body.email
-    )
-    .fetch_optional(&state.db)
-    .await;
+        let user = sqlx::query_as!(
+            AuthUser,
+                r#"
+                SELECT
+                    id as "id: Uuid",
+                    email,
+                    password
+                FROM users
+                WHERE email = ?
+                "#,
+            body.email,
+        )
+        .fetch_optional(&state.db)
+        .await;
 
     match user {
         Ok(Some(user)) => {
             if user.password == body.password {
-                let token = generate_token(user.id);
+                let token = generate_token(user.id.to_string());
                 Json(json!({
                     "token": token,
                     "user": user
@@ -45,7 +53,7 @@ pub async fn login(State(state): State<AppState>, Json(body): Json<LoginRequest>
     }
 }
 
-fn generate_token(user_id: u64) -> String {
+fn generate_token(user_id: String) -> String {
 
     let expiration = Utc::now()
         .checked_add_signed(Duration::hours(24))
