@@ -18,7 +18,6 @@ pub async fn main() {
 
     // Créer le pool SQLx
     let db = MySqlPoolOptions::new()
-        .max_connections(5)
         .connect(&database_url)
         .await
         .expect("Impossible de se connecter à MySQL");

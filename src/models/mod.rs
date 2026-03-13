@@ -1,5 +1,6 @@
 pub mod user;
 pub mod claim;
+pub mod survey;
 
 pub use user::LoginRequest;
 pub use user::User;
