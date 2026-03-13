@@ -13,13 +13,14 @@ pub async fn register(
 
     let result = sqlx::query_as!(
         User,
-        "INSERT INTO users (id, last_name, first_name, pseudo, email, password) VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO users (id, last_name, first_name, pseudo, email, password, phone) VALUES (?, ?, ?, ?, ?, ?, ?)",
         id,
         body.last_name,
         body.first_name,
         body.pseudo,
         body.email,
         body.password,
+        body.phone,
     )
         .execute(&state.db)
         .await;
