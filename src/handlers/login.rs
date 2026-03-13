@@ -1,6 +1,5 @@
 use crate::config::AppState;
 use crate::models::{Claims, LoginRequest};
-use crate::models::User;
 use crate::models::AuthUser;
 use axum::Json;
 use axum::extract::State;
