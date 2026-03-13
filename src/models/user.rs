@@ -33,6 +33,7 @@ pub struct RegisterUser {
     pub pseudo: String,
     pub email: String,
     pub password: String,
+    pub phone: String,
 }
 
 #[derive(Debug, FromRow, Serialize, Deserialize)]
