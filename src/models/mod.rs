@@ -1,8 +1,11 @@
-pub mod user;
 pub mod claim;
+pub mod survey;
 
-pub use user::LoginRequest;
-pub use user::User;
-pub use user::AuthUser;
+pub mod user;
 pub use claim::Claims;
+pub use survey::Survey;
+pub use user::AuthUser;
+pub use user::LoginRequest;
 pub use user::RegisterUser;
+pub use user::User;
+
