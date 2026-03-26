@@ -1,7 +1,7 @@
 use serde::Serialize;
 use uuid::Uuid;
 
-#[derive(Serialize)]
+#[derive(Serialize,sqlx::FromRow)]
 pub struct Survey {
     pub id: Uuid,
     pub creator_id: Uuid,
