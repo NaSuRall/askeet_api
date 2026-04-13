@@ -8,4 +8,5 @@ pub fn create_router() -> Router<AppState> {
     Router::new()
         .nest("/api", user::routes())
         .nest("/api", survey::routes())
+        .nest("/api", category::routes())
 }

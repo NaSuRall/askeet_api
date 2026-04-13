@@ -6,7 +6,7 @@ use crate::models::category::Category;
 
 pub async fn liste_all_categories(State(state): State<AppState>) ->Json<Value>{
     let categories = sqlx::query_as::<_, Category>(
-        "SELECT * FROM categories ORDER BY id ASC"
+        "SELECT id , name FROM categories ORDER BY id ASC"
     ).fetch_all(&state.db).await;
 
     match categories {
