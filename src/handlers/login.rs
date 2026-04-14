@@ -1,18 +1,17 @@
 use crate::config::AppState;
-use crate::models::{Claims, LoginRequest};
-use crate::models::User;
 use crate::models::AuthUser;
+use crate::models::{Claims, LoginRequest};
 use axum::Json;
 use axum::extract::State;
 use chrono::{Duration, Utc};
+use jsonwebtoken::{EncodingKey, Header, encode};
 use serde_json::{Value, json};
-use jsonwebtoken::{encode, Header, EncodingKey};
 use uuid::Uuid;
 
 pub async fn login(State(state): State<AppState>, Json(body): Json<LoginRequest>) -> Json<Value> {
-        let user = sqlx::query_as!(
-            AuthUser,
-                r#"
+    let user = sqlx::query_as!(
+        AuthUser,
+        r#"
                 SELECT
                     id as "id: Uuid",
                     email,
@@ -20,10 +19,10 @@ pub async fn login(State(state): State<AppState>, Json(body): Json<LoginRequest>
                 FROM users
                 WHERE email = ?
                 "#,
-            body.email,
-        )
-        .fetch_optional(&state.db)
-        .await;
+        body.email,
+    )
+    .fetch_optional(&state.db)
+    .await;
 
     match user {
         Ok(Some(user)) => {
@@ -54,7 +53,6 @@ pub async fn login(State(state): State<AppState>, Json(body): Json<LoginRequest>
 }
 
 fn generate_token(user_id: String) -> String {
-
     let expiration = Utc::now()
         .checked_add_signed(Duration::hours(24))
         .unwrap()
@@ -68,6 +66,8 @@ fn generate_token(user_id: String) -> String {
     encode(
         &Header::default(),
         &claims,
-        &EncodingKey::from_secret("secret_key".as_ref())
-    ).unwrap()
+        &EncodingKey::from_secret("secret_key".as_ref()),
+    )
+    .unwrap()
 }
+
