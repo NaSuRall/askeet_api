@@ -1,0 +1,14 @@
+services:
+  api:
+    build: .
+    container_name: askeet-api
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=mysql://u998935179_askeet_db:VwNcPgX7us@srv1794.hstgr.io:3306/u998935179_askeet_db
+      - SERVER_ADDRESS=0.0.0.0
+      - SERVER_PORT=3000
+      - JWT_SECRET=secret_key
+      # Optionnel : pour voir plus de détails si ça plante encore
+      - RUST_BACKTRACE=1
