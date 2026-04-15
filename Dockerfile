@@ -1,8 +1,10 @@
-# ---- Build stage ----r
-FROM rust:1.83-slim
+
+# ---- Build stage ----
+FROM rust:1.83-slim AS builder
 
 WORKDIR /app
 COPY . .
+
 RUN cargo build --release
 
 # ---- Run stage ----
@@ -15,7 +17,6 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Copie uniquement le binaire compilé
 COPY --from=builder /app/target/release/askeet_api_rust .
 
 EXPOSE 3000
