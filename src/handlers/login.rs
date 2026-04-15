@@ -56,8 +56,29 @@ pub async fn login(State(state): State<AppState>, Json(body): Json<LoginRequest>
         })),
     }
 }
-
+/*
 fn generate_token(user_id: String) -> String {
+    let expiration = Utc::now()
+        .checked_add_signed(Duration::hours(24))
+        .unwrap()
+        .timestamp() as usize;
+
+    let claims = Claims {
+        sub: user_id,
+        exp: expiration,
+    };
+
+    let secret = std::env::var("JWT_SECRET").expect("JWT_SECRET manquant");
+
+    encode(
+        &Header::default(),
+        &claims,
+        &EncodingKey::from_secret(secret.as_bytes()),
+    )
+    .unwrap()
+}*/
+fn generate_token(user_id: String) -> String {
+    let secret = std::env::var("JWT_SECRET").expect("JWT_SECRET manquant"); // <- ajoute ça
     let expiration = Utc::now()
         .checked_add_signed(Duration::hours(24))
         .unwrap()
@@ -71,9 +92,7 @@ fn generate_token(user_id: String) -> String {
     encode(
         &Header::default(),
         &claims,
-        // ⚠️ À remplacer par une variable d'environnement en prod
-        &EncodingKey::from_secret("secret_key".as_ref()),
+        &EncodingKey::from_secret(secret.as_bytes()), // <- utilise le secret .env
     )
     .unwrap()
 }
-
