@@ -3,12 +3,15 @@ use axum::{Router, routing::get};
 use axum::routing::post;
 use crate::handlers::register;
 use crate::handlers::login;
+use crate::handlers::user_handler;
+
 pub fn routes() -> Router<AppState> {
     Router::new()
         .route("/user", get(list_users))
         .route("/user/{id}", get(get_user))
         .route("/register", post(register::register))
         .route("/login", post(login::login))
+        .route("/me", get(user_handler::me))
 }
 
 // Utilisation du Model User avec le <User>
