@@ -1,5 +1,5 @@
-# ---- Build stage ----
-FROM rust:1.75 AS builder
+# ---- Build stage ----r
+FROM rust:1.83-slim
 
 WORKDIR /app
 COPY . .
