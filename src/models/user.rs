@@ -46,7 +46,7 @@ pub struct AuthUser {
 // model pour route /me 
 #[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct UserResponse {
-    pub id: String,
+    pub id: Uuid,
     pub last_name: String,
     pub first_name: String,
     pub pseudo: String,
@@ -54,6 +54,6 @@ pub struct UserResponse {
     pub birth_date: Option<NaiveDate>,
     pub phone: Option<String>,
     pub pp: Option<String>,
-    pub subscription: bool,
+    pub subscription: Option<bool>,
     pub created_at: Option<NaiveDateTime>,
 }
