@@ -1,6 +1,6 @@
 {
   "db_name": "MySQL",
-  "query": "\n                SELECT\n                    id as \"id: Uuid\",\n                    email,\n                    password\n                FROM users\n                WHERE email = ?\n                ",
+  "query": "\n        SELECT\n            id as \"id: Uuid\",\n            email,\n            password\n        FROM users\n        WHERE email = ?\n        ",
   "describe": {
     "columns": [
       {
@@ -43,5 +43,5 @@
       false
     ]
   },
-  "hash": "90421e17e32f8c9995eafc78b3e2065b24b995054db1e096083a9fa5b439eee2"
+  "hash": "3f61e229170312324541b601e370b3dbbcdef6e68c32580a8816b94af819c49f"
 }
