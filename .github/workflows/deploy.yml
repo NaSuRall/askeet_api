@@ -19,8 +19,9 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             cd /var/www/api/askeet_api
-            git pull origin main
+            git pull
             source $HOME/.cargo/env
             cargo build --release
-            sudo systemctl restart axum-api
+            sudo systemctl daemon-reload
+            udo systemctl restart axum-api
             echo "Déploiement terminé !"
